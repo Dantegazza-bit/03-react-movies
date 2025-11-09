@@ -1,6 +1,13 @@
 import axios from "axios";
 import type { Movie } from "../types/movie";
 
+interface TmdbSearchResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
 const TMDB = axios.create({
   baseURL: "https://api.themoviedb.org/3/",
   headers: {
@@ -10,7 +17,7 @@ const TMDB = axios.create({
 });
 
 export async function fetchMovies(query: string): Promise<Movie[]> {
-  const { data } = await TMDB.get("/search/movie", {
+  const { data } = await TMDB.get<TmdbSearchResponse>("/search/movie", {
     params: {
       query,
       include_adult: false,
